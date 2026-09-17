@@ -1,0 +1,51 @@
+{ lambda ; a:f64[]. let
+    b:f64[] = mul a 2.0:f64[]
+    c:f64[] = quantum_kernel[
+      call_jaxpr={ lambda ; d:f64[]. let
+          device_init[
+            auto_qubit_management=False
+            rtd_kwargs={'mcmc': False, 'num_burnin': 0, 'kernel_name': None}
+            rtd_lib=/Users/filip/src/catalyst/.venv/lib/python3.13/site-packages/pennylane_lightning/liblightning_qubit_catalyst.dylib
+            rtd_name=LightningSimulator
+          ] 0:i64[]
+          e:AbstractQreg() = qalloc 2:i64[]
+          f:AbstractQbit() = qextract e 0:i64[]
+          g:AbstractQbit() = qinst[
+            adjoint=False
+            ctrl_len=0
+            op=RX
+            params_len=1
+            pcphase_dim=None
+            qubits_len=1
+          ] f d
+          h:AbstractQbit() = qinst[
+            adjoint=False
+            ctrl_len=0
+            op=RX
+            params_len=1
+            pcphase_dim=None
+            qubits_len=1
+          ] g d
+          i:AbstractQbit() = qextract e 1:i64[]
+          j:AbstractQbit() k:AbstractQbit() = qinst[
+            adjoint=False
+            ctrl_len=0
+            op=CNOT
+            params_len=0
+            pcphase_dim=None
+            qubits_len=2
+          ] h i
+          l:AbstractObs(num_qubits=None,qreg=None,primitive=None) = namedobs[
+            kind=PauliZ
+          ] j
+          m:f64[] = expval l
+          n:AbstractQreg() = qinsert e 0:i64[] j
+          o:AbstractQreg() = qinsert n 1:i64[] k
+          qdealloc o
+          device_release 
+        in (m,) }
+      pipelines=(('main', ()),)
+      qnode=<QNode: device='<lightning.qubit device (wires=2) at 0x13212f4d0>', interface='auto', diff_method='best', shots='Shots(total=None)'>
+    ] b
+    p:f64[] = add c 1.0:f64[]
+  in (p,) }
