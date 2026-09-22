@@ -6,12 +6,18 @@ The example lives in [program.py](program.py): a 2-qubit QNode (`RX`, `RX`, `CNO
 `expval(Z)`) wrapped in classical pre/post-processing, so both the quantum and the
 classical halves of the IR are visible.
 
+## Layout
+
+Check this walkthrough out **inside a Catalyst source tree** (i.e. as a sibling of
+`frontend/`, `mlir/` and `runtime/`). Every `../` path below — the virtualenv, the
+built binaries and the source links — resolves relative to that checkout.
+
 ```bash
-.venv/bin/python 01_jaxpr.py
-.venv/bin/python 02_mlir.py
-.venv/bin/python 03_stages.py     # writes ./out/
+../.venv/bin/python 01_jaxpr.py
+../.venv/bin/python 02_mlir.py
+../.venv/bin/python 03_stages.py     # writes ./out/
 ./04_single_pass.sh
-.venv/bin/python 05_apply_pass_from_python.py
+../.venv/bin/python 05_apply_pass_from_python.py
 ```
 
 `01_jaxpr.py` and `02_mlir.py` call `QJIT.capture()` and `QJIT.generate_ir()` directly,
